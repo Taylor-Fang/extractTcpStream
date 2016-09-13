@@ -2,7 +2,7 @@
 
 
 使用说明：
-./extractTcpStream [-h] [-d] [-l link_layer_size] [-o format] <pacpfile>
+./extractTcpStream [-h] [-d] [-l link_layer_size] [-o format]  <pacpfile>
 
 
 示例：./extractTcpStream  http.pcap
