@@ -2,6 +2,8 @@
 
 using namespace std;
 
+ofstream fout;
+
 int main(int argc,char **argv){
 	increase_filehandle_limits();
 	int c;
@@ -69,12 +71,21 @@ int main(int argc,char **argv){
 	int rc;
 	struct pcap_pkthdr *pkt_header;
 	const u_char *pkt_data;
+
+	//存储流文件文件名
+	fout.open("streamfilename.txt");
+	if(!fout.is_open()){
+		cerr << "Cannot open file streamfilename.txt\n";
+		exit(EXIT_FAILURE);
+	}
+
 	while(!quit && (rc = pcap_next_ex(infile,&pkt_header,&pkt_data))== 1)
 		handle_packet(infile,pkt_header,pkt_data);
-	
+
 	map<connection_key_t,connection_t>::iterator it;
 	for(it = conninfo.begin();it != conninfo.end();it++)
 		pcap_dump_close(it->second.outfile);
+	fout.close();
 
 	if(rc == -1){
 		pcap_perror(infile,(char *)"Reading packet error\n");
@@ -220,6 +231,7 @@ pcap_dumper_t *open_new_outfile(pcap_t *infile){
 	now_open++;
 	char fname[1024];
 	snprintf(fname,sizeof(fname),outform.c_str(),curn++);
+	fout << fname << endl;
 	pcap_dumper_t *outfile = pcap_dump_open(infile,fname);
 	if(debug)
 		cerr << "Opened " << outfile << endl;

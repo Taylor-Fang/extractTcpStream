@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <sstream>
 #include <map>
